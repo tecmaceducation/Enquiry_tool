@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enquiry Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        // Function to auto-fill city and state based on pin code
+        function autofillLocation() {
+            const pinCode = document.getElementById("pinCode").value;
+
+            fetch(`/get-location?pin_code=${pinCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.city && data.state) {
+                        document.getElementById("city").value = data.city;
+                        document.getElementById("state").value = data.state;
+                    } else {
+                        alert("Invalid Pin Code!");
+                    }
+                })
+                .catch(error => {
+                    alert("Error fetching location details");
+                });
+        }
+
+        // Function to capture the form submission date and time
+        function captureDateTime() {
+            const currentDateTime = new Date();
+            document.getElementById("dateTime").value = currentDateTime.toLocaleString();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Section -->
+        <header class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        </header>
+
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <!-- Left Section: About Us -->
+            <div class="left-section">
+                <div class="about-us">
+                    <h3>About Us</h3>
+                    <p><strong>🚀 Welcome to Tecmac Education! 🚀</strong></p>
+                    <p>At Tecmac Education, we're not just about teaching – we're about transforming futures. Specializing in Computer Science Technical and Non-Technical disciplines, as well as Multimedia Designing courses, we empower students to thrive in the dynamic digital landscape.</p>
+                    
+                    <p><strong>🖥️ Dive into the World of Computing:</strong><br>
+                    Whether you're delving into programming languages, exploring data science, or mastering cybersecurity, our comprehensive Computer Science Technical courses equip you with the skills to conquer tomorrow's challenges.</p>
+                    
+                    <p><strong>🎨 Unleash Your Creativity with Multimedia Designing:</strong><br>
+                    From graphic design to animation, video editing to web development, our Multimedia Designing courses blend technical expertise with artistic flair, empowering you to bring your imaginative visions to life.</p>
+
+                    <p><strong>💡 Beyond Education, Towards Excellence:</strong><br>
+                    At Tecmac, education extends beyond the classroom. Our industry-aligned curriculum, hands-on projects, and expert guidance prepare you not just for a job, but for a successful career in the ever-evolving tech and design industries.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/tecmacedu/" target="_blank">Instagram</a> |
+                    <a href="https://in.linkedin.com/company/tecmac-education" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+
+            <!-- Right Section: Enquiry Form -->
+            <div class="form-container">
+                <h2>Enquiry Form</h2>
+                <form action="/submit-form" method="POST" onsubmit="captureDateTime()">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+
+                    <label for="mobile">Mobile Number</label>
+                    <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+
+                    <label for="email">Email ID</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email ID" required>
+
+                    <label for="pinCode">Pin Code</label>
+                    <input type="text" id="pinCode" name="pinCode" placeholder="Enter your area pin code" oninput="autofillLocation()" required>
+
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" readonly>
+
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" readonly>
+
+                    <label for="course">Select Course</label>
+                    <select id="course" name="course" required>
+                        <option value="" disabled selected>Please Select Your Required Course...</option>
+                        <option value="MST">Master In Software Technology - MST</option>
+                        <option value="ADBP">Advanced Diploma In Basic Programming - ADBP</option>
+                        <option value="ADJP">Advanced Diploma In Java Programming - ADJP</option>
+                        <option value="ADPP">Advanced Diploma In Python Programming - ADPP</option>
+                        <option value="Full Stack Java">Full Stack Java Programming</option>
+                        <option value="Full Stack Python">Full Stack Python Programming</option>
+                        <option value="Full Stack Web">Full Stack Web Development</option>
+                        <option value="ADCA">Advanced Diploma In Computer Application - ADCA</option>
+                        <option value="DCA">Diploma In Computer Application - DCA</option>
+                        <option value="Tally ERP 9">Tally ERP 9</option>
+                        <option value="Tally Prime">Tally Prime</option>
+                        <option value="MDGA">Master Diploma In Graphic Animation - MDGA</option>
+                        <option value="UI/UX Designing">UI/UX Designing</option>
+                        <option value="Photoshop">Adobe Photoshop</option>
+                        <option value="Illustrator">Adobe Illustrator</option>
+                        <option value="XD">Adobe XD</option>
+                        <option value="Coral Draw">Coral Draw</option>
+                        <option value="Other">Other...</option>
+                    </select>
+
+                    <input type="hidden" id="dateTime" name="dateTime">
+                    <button type="submit">Submit Enquiry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
